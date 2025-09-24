@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservar Exemplar</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; }
+    .container {
+      max-width: 500px; margin: 50px auto; padding: 20px;
+      background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%; padding: 10px; margin: 10px 0;
+    }
+    button {
+      background: #007bff; color: white; border: none;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Reservar Exemplar</h2>
+    <form id="formReserva">
+      <label for="cliente">Cliente:</label>
+      <select id="cliente" required>
+        <option value="">Selecione...</option>
+        <option value="1">Carlos Silva</option>
+        <option value="2">Ana Souza</option>
+      </select>
+
+      <label for="livro">Livro:</label>
+      <select id="livro" required>
+        <option value="">Selecione...</option>
+        <option value="1" data-estoque="5">O Pequeno Príncipe</option>
+        <option value="2" data-estoque="0">Dom Casmurro (indisponível)</option>
+      </select>
+
+      <label for="data">Data da Reserva:</label>
+      <input type="date" id="data" required>
+
+      <button type="submit">Confirmar Reserva</button>
+      <p id="mensagem" style="color: green;"></p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("formReserva").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const cliente = document.getElementById("cliente").value;
+      const livro = document.getElementById("livro").value;
+      const livroSelecionado = document.querySelector(`#livro option[value="${livro}"]`);
+      const estoque = parseInt(livroSelecionado.getAttribute("data-estoque"));
+      const data = document.getElementById("data").value;
+
+      if (!cliente || !livro || !data) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      if (estoque < 1) {
+        document.getElementById("mensagem").style.color = "red";
+        document.getElementById("mensagem").textContent = "Livro indisponível no momento.";
+        return;
+      }
+
+      // Aqui você faria uma chamada ao backend para registrar a reserva
+      // ex: fetch('/api/reservas', { method: 'POST', body: JSON.stringify(...) })
+
+      document.getElementById("mensagem").style.color = "green";
+      document.getElementById("mensagem").textContent = "Reserva realizada com sucesso!";
+      document.getElementById("formReserva").reset();
+    });
+  </script>
+</body>
+</html>

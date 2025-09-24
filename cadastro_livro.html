@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Livro</title>
+  <style>
+    body { font-family: Arial; background: #f5f5f5; }
+    .form-container {
+      width: 400px; margin: 50px auto;
+      background: white; padding: 20px;
+      border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      width: 100%; padding: 10px; margin: 10px 0;
+    }
+    button {
+      background: #28a745; color: white; border: none;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Cadastrar Livro</h2>
+    <form id="formLivro">
+      <input type="text" id="titulo" placeholder="Título" required>
+      <input type="text" id="autor" placeholder="Autor">
+      <input type="text" id="isbn" placeholder="ISBN">
+      <input type="number" id="quantidade" placeholder="Quantidade em estoque" required>
+      <textarea id="observacoes" placeholder="Observações (opcional)"></textarea>
+      <button type="submit">Salvar</button>
+      <p id="mensagem" style="color: green;"></p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("formLivro").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const titulo = document.getElementById("titulo").value.trim();
+      const autor = document.getElementById("autor").value.trim();
+      const isbn = document.getElementById("isbn").value.trim();
+      const quantidade = parseInt(document.getElementById("quantidade").value);
+      const observacoes = document.getElementById("observacoes").value.trim();
+
+      if (!titulo || isNaN(quantidade) || quantidade < 1) {
+        alert("Preencha corretamente os campos obrigatórios.");
+        return;
+      }
+
+      // Aqui você faria uma requisição ao backend para salvar o livro no banco de dados.
+      // Exemplo (fictício):
+      // fetch('/api/livros', { method: 'POST', body: JSON.stringify(...) })
+
+      document.getElementById("mensagem").textContent = "Livro cadastrado com sucesso!";
+      document.getElementById("formLivro").reset();
+    });
+  </script>
+
+</body>
+</html>

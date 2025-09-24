@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Histórico por Cliente</title>
+  <style>
+    body { font-family: Arial; background: #f5f5f5; }
+    .container {
+      max-width: 700px; margin: 50px auto; background: white;
+      padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select, table {
+      width: 100%; margin: 15px 0;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc; padding: 8px; text-align: left;
+    }
+    th {
+      background-color: #007bff; color: white;
+    }
+    #mensagem {
+      margin-top: 20px; color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Histórico de Livros por Cliente</h2>
+  
+  <label for="cliente">Selecione o Cliente:</label>
+  <select id="cliente">
+    <option value="">-- Selecione --</option>
+    <option value="1">Carlos Silva</option>
+    <option value="2">Ana Souza</option>
+  </select>
+  
+  <table id="tabelaHistorico" style="display:none;">
+    <thead>
+      <tr>
+        <th>Livro</th>
+        <th>Tipo</th>
+        <th>Data</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  
+  <p id="mensagem"></p>
+</div>
+
+<script>
+  const dadosHistorico = {
+    "1": [
+      { livro: "O Pequeno Príncipe", tipo: "Reserva", data: "2025-09-15", status: "Concluído" },
+      { livro: "Dom Casmurro", tipo: "Venda", data: "2025-09-20", status: "Concluído" }
+    ],
+    "2": [
+      { livro: "Dom Casmurro", tipo: "Empréstimo", data: "2025-09-22", status: "Ativo" }
+    ]
+  };
+
+  const clienteSelect = document.getElementById("cliente");
+  const tabela = document.getElementById("tabelaHistorico");
+  const tbody = tabela.querySelector("tbody");
+  const mensagem = document.getElementById("mensagem");
+
+  clienteSelect.addEventListener("change", () => {
+    const clienteId = clienteSelect.value;
+
+    if (!clienteId) {
+      tabela.style.display = "none";
+      mensagem.textContent = "";
+      return;
+    }
+
+    const historico = dadosHistorico[clienteId] || [];
+
+    tbody.innerHTML = "";
+
+    if (historico.length === 0) {
+      tabela.style.display = "none";
+      mensagem.textContent = "Nenhum histórico encontrado para este cliente.";
+      return;
+    }
+
+    historico.forEach(registro => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${registro.livro}</td>
+        <td>${registro.tipo}</td>
+        <td>${registro.data}</td>
+        <td>${registro.status}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    mensagem.textContent = "";
+    tabela.style.display = "table";
+  });
+</script>
+
+</body>
+</html>

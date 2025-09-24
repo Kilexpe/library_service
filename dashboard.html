@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Sistema Livraria</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: white; border-radius: 8px; }
+    h1 { text-align: center; }
+    .menu { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; justify-content: center; }
+    .menu button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .menu button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="bemVindo">Bem-vindo(a), Usuário!</h1>
+
+    <div class="menu" id="menuPrincipal">
+      <!-- Botões serão inseridos aqui dinamicamente -->
+    </div>
+  </div>
+
+  <script>
+    // Simulação de dados recuperados do login
+    const usuarioLogado = {
+      nome: "João Gerente",
+      tipo: "gerente" // ou "atendente"
+    };
+
+    document.getElementById("bemVindo").textContent = `Bem-vindo(a), ${usuarioLogado.nome}`;
+
+    const menu = document.getElementById("menuPrincipal");
+
+    // Funções comuns a ambos
+    const botoesComuns = [
+      { texto: "Reservar Exemplar", link: "reservar.html" },
+      { texto: "Editar/Cancelar Reserva", link: "editar_reserva.html" },
+      { texto: "Registrar Venda/Empréstimo", link: "movimentacao.html" },
+      { texto: "Histórico por Cliente", link: "historico.html" },
+      { texto: "Logout", link: "login.html" }
+    ];
+
+    const botoesGerente = [
+      { texto: "Cadastrar Livro", link: "cadastro_livro.html" },
+      { texto: "Relatório por Período", link: "relatorio.html" }
+    ];
+
+    // Montagem do menu
+    const todosBotoes = usuarioLogado.tipo === "gerente"
+      ? [...botoesComuns, ...botoesGerente]
+      : botoesComuns;
+
+    todosBotoes.forEach(btn => {
+      const botao = document.createElement("button");
+      botao.textContent = btn.texto;
+      botao.onclick = () => window.location.href = btn.link;
+      menu.appendChild(botao);
+    });
+  </script>
+</body>
+</html>

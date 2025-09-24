@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar ou Cancelar Reservas</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; }
+    .container {
+      max-width: 800px; margin: 50px auto; padding: 20px;
+      background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px; border: 1px solid #ccc; text-align: left;
+    }
+    button {
+      padding: 5px 10px; margin-right: 5px;
+    }
+    .btn-cancelar { background: #dc3545; color: white; border: none; }
+    .btn-salvar { background: #28a745; color: white; border: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Editar ou Cancelar Reservas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Livro</th>
+          <th>Data da Reserva</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="listaReservas">
+        <!-- Reservas serão carregadas aqui -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Simulação de reservas ativas
+    const reservas = [
+      { id: 1, cliente: "Carlos Silva", livro: "O Pequeno Príncipe", data: "2025-09-24", status: "ativa" },
+      { id: 2, cliente: "Ana Souza", livro: "Dom Casmurro", data: "2025-09-25", status: "ativa" }
+    ];
+
+    const tbody = document.getElementById("listaReservas");
+
+    reservas.forEach(reserva => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${reserva.cliente}</td>
+        <td>${reserva.livro}</td>
+        <td>
+          <input type="date" value="${reserva.data}" id="data-${reserva.id}">
+        </td>
+        <td>${reserva.status}</td>
+        <td>
+          <button class="btn-salvar" onclick="salvar(${reserva.id})">Salvar</button>
+          <button class="btn-cancelar" onclick="cancelar(${reserva.id})">Cancelar</button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    function salvar(id) {
+      const novaData = document.getElementById(`data-${id}`).value;
+      // Aqui faria uma requisição ao back-end para atualizar a data
+      alert(`Reserva ${id} atualizada para ${novaData}`);
+    }
+
+    function cancelar(id) {
+      // Aqui faria uma requisição ao back-end para alterar status para 'cancelada'
+      alert(`Reserva ${id} foi cancelada.`);
+    }
+  </script>
+</body>
+</html>

@@ -1,46 +1,33 @@
 <?php
-// Configurações de conexão com o banco de dados
+$email = $_POST["email"];
+$password = $_Post["senha"];
+
+// Conectar ao banco de dados
 $host = 'localhost';
 $user = 'root';
 $password = '123456';
 $database = 'library_db';
 
-// Conectar ao banco de dados
-$conn = new mysqli($host, $user, $password, $database);
 
-// Verificar conexão
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = "SELECT * FROM usuario Where email = ?";
+    $query = $conn->prepare($sql);
+    $query->execute([$email]);
+    $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
 
-// Obter dados do frontend (email e senha)
-$email = $_POST['email'];
-$senha = $_POST['senha'];
-
-// Preparar e executar a consulta SQL
-$sql = "SELECT * FROM usuario WHERE email = ? LIMIT 1";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email); // "s" indica que é uma string
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Verificar se o usuário existe
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-
-    // Verificar se a senha está correta (assumindo que a senha está em texto claro, para segurança, use hashing)
-    if ($senha === $user['senha']) {
-        // Login bem-sucedido
-        echo json_encode(["success" => true, "message" => "Autenticação bem-sucedida!"]);
+    if ($resultados == null) {
+        echo "Esse Email não existe ou Minha consulta deu erro, socorro programador";
     } else {
-        // Senha incorreta
-        echo json_encode(["success" => false, "message" => "Senha incorreta!"]);
+        echo "Esse Email está no banco de dados e foi achado no banco de dados...";
+        echo "Direcionando para o dashboard...";
+        header("Location: Dashboard.html");
+        exit;
     }
-} else {
-    // Usuário não encontrado
-    echo json_encode(["success" => false, "message" => "Credenciais inválidas!"]);
-}
 
-// Fechar a conexão
-$conn->close();
-?>
+} catch (PDOException $e) {
+    die("Erro de conexão, verifique a conexão do banco de dados");
+}
+    
+
